@@ -1,22 +1,24 @@
 package com.example.pnp.holoredearapp;
-        import android.app.Activity;
-        import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothDevice;
-        import android.bluetooth.BluetoothSocket;
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-        import android.widget.Toast;
-        import android.os.Handler;
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.OutputStream;
-        import java.util.Set;
-        import java.util.UUID;
+
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
 
 public class MainActivity extends Activity {
     //    private final String DEVICE_NAME="H-C-2010-06-01(3366)";
@@ -25,8 +27,8 @@ public class MainActivity extends Activity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button startButton, sendButton,clearButton,stopButton;
-    TextView textView, labelDescription;
+    Button startButton, deviceButton,clearButton,stopButton;
+    TextView textView, labelDescription, deviceName;
     EditText editText;
     ImageView imageView;
     private int readIndex;
@@ -45,14 +47,29 @@ public class MainActivity extends Activity {
 //        sendButton = (Button) findViewById(R.id.buttonSend);
         clearButton = (Button) findViewById(R.id.buttonClear);
         stopButton = (Button) findViewById(R.id.buttonStop);
+        deviceButton = (Button) findViewById(R.id.chooseDeviceButton);
+        deviceName = (TextView)findViewById(R.id.deviceNames);
+        final FragmentManager fm=getFragmentManager();
+        final DeviceDialog tv=new DeviceDialog();
+        tv.setMain(this);
+        BTinit();
+        deviceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.show(fm,"device_tag");
+            }
+        });
 //        editText = (EditText) findViewById(R.id.editText);
         textView = (TextView) findViewById(R.id.textView);
         labelDescription = (TextView) findViewById(R.id.labelDescription);
         imageView = (ImageView) findViewById(R.id.borobudur);
         setUiEnabled(false);
-
     }
 
+    public void setDevice(BluetoothDevice device){
+        this.device = device;
+        deviceName.setText(this.device.getName());
+    }
     public void setUiEnabled(boolean bool)
     {
         startButton.setEnabled(!bool);
@@ -67,35 +84,37 @@ public class MainActivity extends Activity {
         boolean found=false;
         BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
+            found = false;
             Toast.makeText(getApplicationContext(),"Device doesnt Support Bluetooth",Toast.LENGTH_SHORT).show();
-        }
-        if(!bluetoothAdapter.isEnabled())
-        {
-            Intent enableAdapter = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableAdapter, 0);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-        if(bondedDevices.isEmpty())
-        {
-            Toast.makeText(getApplicationContext(),"Please Pair the Device first",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            for (BluetoothDevice iterator : bondedDevices)
+        }else{
+            if(!bluetoothAdapter.isEnabled())
             {
-                if(iterator.getName().equals("HOLOGRAM_READER"))
-                {
-                    device=iterator;
-                    found=true;
-                    break;
+                Intent enableAdapter = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableAdapter, 0);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+            found = true;
         }
+
+//        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+//        if(bondedDevices.isEmpty())
+//        {
+//            Toast.makeText(getApplicationContext(),"Please Pair the Device first",Toast.LENGTH_SHORT).show();
+//        }else{
+//            for (BluetoothDevice iterator : bondedDevices)
+//            {
+//                if(iterator.getName().equals("HOLOGRAM_READER"))
+//                {
+//                    device=iterator;
+//                    found=true;
+//                    break;
+//                }
+//            }
+//        }
         return found;
     }
 

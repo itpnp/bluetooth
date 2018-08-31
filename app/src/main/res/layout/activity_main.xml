@@ -31,17 +31,32 @@
             android:layout_centerHorizontal="true"
             android:textColor="#000000"
             android:textSize="27sp" />
-
-        <!--<EditText-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/editText"-->
-        <!--android:layout_below="@+id/logoPnp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true" />-->
+        <LinearLayout
+            android:layout_below="@+id/pura"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:id="@+id/layoutDevice">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Devices"
+                android:id="@+id/chooseDeviceButton"
+                android:onClick="onClickStart"
+                android:layout_below="@+id/pura"
+                android:layout_alignStart="@+id/pura" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deviceNames"
+                android:textStyle="bold"
+                android:text="PILIH HOLOREADER"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toRightOf="@+id/buttonStart"
+                android:layout_toEndOf="@+id/buttonStart"/>
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -49,18 +64,8 @@
             android:text="Begin"
             android:id="@+id/buttonStart"
             android:onClick="onClickStart"
-            android:layout_below="@+id/pura"
+            android:layout_below="@+id/layoutDevice"
             android:layout_alignStart="@+id/pura" />
-
-        <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Send"-->
-        <!--android:id="@+id/buttonSend"-->
-        <!--android:onClick="onClickSend"-->
-        <!--android:layout_below="@+id/pura"-->
-        <!--android:layout_toRightOf="@+id/buttonStart"-->
-        <!--android:layout_toEndOf="@+id/buttonStart" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +85,7 @@
             android:text="Stop"
             android:id="@+id/buttonStop"
             android:onClick="onClickStop"
-            android:layout_below="@+id/pura"
+            android:layout_below="@+id/layoutDevice"
             android:layout_centerHorizontal="true" />
 
         <Button
@@ -89,7 +94,7 @@
             android:text="Clear"
             android:id="@+id/buttonClear"
             android:onClick="onClickClear"
-            android:layout_below="@+id/pura"
+            android:layout_below="@+id/layoutDevice"
             android:layout_alignEnd="@+id/pura" />
 
         <ImageView
@@ -119,14 +124,5 @@ This Hologram also contains authentication feature, using Character Pattern Reco
             android:visibility="gone"
             android:layout_toRightOf="@+id/buttonStart"
             android:layout_toEndOf="@+id/buttonStart" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="92dp"
-            android:layout_toStartOf="@+id/buttonStop"
-            android:text="Button" />
     </RelativeLayout>
 </ScrollView>
